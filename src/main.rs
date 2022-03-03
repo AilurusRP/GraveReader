@@ -21,7 +21,7 @@ fn process_commands<R: io::Read + io::Seek>(
     doc: &mut EpubDoc<R>,
     input: String,
 ) -> Option<&'static str> {
-    match &input[..] {
+    match input.as_str() {
         "next()" => doc.go_next().unwrap(),
         "show()" => println!("{}", doc.get_current_str().unwrap()),
         "exit()" => return Some("break"),
