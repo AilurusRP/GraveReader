@@ -1,5 +1,5 @@
 use epub::doc::EpubDoc;
-use std::io;
+use std::io::{stdin, Read, Seek};
 
 fn strip_end_line(s: String) -> Result<String, &'static str> {
     match s.strip_suffix("\r\n") {
@@ -13,14 +13,11 @@ fn strip_end_line(s: String) -> Result<String, &'static str> {
 
 fn get_input() -> String {
     let mut buffer = String::new();
-    io::stdin().read_line(&mut buffer).unwrap();
+    stdin().read_line(&mut buffer).unwrap();
     strip_end_line(buffer).expect("Error: ")
 }
 
-fn process_commands<R: io::Read + io::Seek>(
-    doc: &mut EpubDoc<R>,
-    input: String,
-) -> Option<&'static str> {
+fn process_commands<R: Read + Seek>(doc: &mut EpubDoc<R>, input: String) -> Option<&'static str> {
     match input.as_str() {
         "next()" => doc.go_next().unwrap(),
         "show()" => println!("{}", doc.get_current_str().unwrap()),
